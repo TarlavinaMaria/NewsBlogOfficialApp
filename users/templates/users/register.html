@@ -4,65 +4,41 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <h2 class="mb-4 text-center">Регистрация</h2>
-        <form method="post" class="needs-validation" novalidate>
+        <form method="post" id="registrationForm" novalidate>
             {% csrf_token %}
             <div class="form-group">
                 <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
-                <input type="text" name="username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="{{ form.username.id_for_label }}" required>
-                <div class="invalid-feedback">
-                    {% if form.username.errors %}
-                        {{ form.username.errors.0 }}
-                    {% else %}
-                        Пожалуйста, введите имя пользователя.
-                    {% endif %}
-                </div>
+                <input type="text" name="username" class="form-control" id="{{ form.username.id_for_label }}" required>
+                <div class="invalid-feedback" id="usernameError"></div>
             </div>
             <div class="form-group">
                 <label for="{{ form.email.id_for_label }}">Email</label>
-                <input type="email" name="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="{{ form.email.id_for_label }}" required>
-                <div class="invalid-feedback">
-                    {% if form.email.errors %}
-                        {{ form.email.errors.0 }}
-                    {% else %}
-                        Пожалуйста, введите корректный email.
-                    {% endif %}
-                </div>
+                <input type="email" name="email" class="form-control" id="{{ form.email.id_for_label }}" required>
+                <div class="invalid-feedback" id="emailError"></div>
             </div>
             <div class="form-group">
                 <label for="{{ form.password1.id_for_label }}">Пароль</label>
                 <div class="input-group">
-                    <input type="password" name="password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" id="{{ form.password1.id_for_label }}" required>
+                    <input type="password" name="password1" class="form-control" id="{{ form.password1.id_for_label }}" required>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" id="togglePassword1">
                             <i class="fa fa-eye" id="eyeIcon1"></i>
                         </button>
                     </div>
                 </div>
-                <div class="invalid-feedback">
-                    {% if form.password1.errors %}
-                        {{ form.password1.errors.0 }}
-                    {% else %}
-                        Пожалуйста, введите пароль.
-                    {% endif %}
-                </div>
+                <div class="invalid-feedback" id="password1Error"></div>
             </div>
             <div class="form-group">
                 <label for="{{ form.password2.id_for_label }}">Подтверждение пароля</label>
                 <div class="input-group">
-                    <input type="password" name="password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" id="{{ form.password2.id_for_label }}" required>
+                    <input type="password" name="password2" class="form-control" id="{{ form.password2.id_for_label }}" required>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
                             <i class="fa fa-eye" id="eyeIcon2"></i>
                         </button>
                     </div>
                 </div>
-                <div class="invalid-feedback">
-                    {% if form.password2.errors %}
-                        {{ form.password2.errors.0 }}
-                    {% else %}
-                        Пожалуйста, подтвердите пароль.
-                    {% endif %}
-                </div>
+                <div class="invalid-feedback" id="password2Error"></div>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
         </form>
@@ -75,6 +51,68 @@
     -->
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registrationForm');
+    const usernameInput = document.getElementById('{{ form.username.id_for_label }}');
+    const emailInput = document.getElementById('{{ form.email.id_for_label }}');
+    const password1Input = document.getElementById('{{ form.password1.id_for_label }}');
+    const password2Input = document.getElementById('{{ form.password2.id_for_label }}');
+    const usernameError = document.getElementById('usernameError');
+    const emailError = document.getElementById('emailError');
+    const password1Error = document.getElementById('password1Error');
+    const password2Error = document.getElementById('password2Error');
+
+    form.addEventListener('submit', function(event) {
+        let isValid = true;
+
+        // Валидация имени пользователя
+        if (usernameInput.value.trim() === '') {
+            usernameError.textContent = 'Пожалуйста, введите имя пользователя.';
+            usernameInput.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            usernameError.textContent = '';
+            usernameInput.classList.remove('is-invalid');
+        }
+
+        // Валидация email
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(emailInput.value)) {
+            emailError.textContent = 'Пожалуйста, введите корректный email.';
+            emailInput.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            emailError.textContent = '';
+            emailInput.classList.remove('is-invalid');
+        }
+
+        // Валидация пароля
+        if (password1Input.value.trim() === '') {
+            password1Error.textContent = 'Пожалуйста, введите пароль.';
+            password1Input.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            password1Error.textContent = '';
+            password1Input.classList.remove('is-invalid');
+        }
+
+        // Валидация подтверждения пароля
+        if (password2Input.value.trim() === '' || password2Input.value !== password1Input.value) {
+            password2Error.textContent = 'Пароли не совпадают.';
+            password2Input.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            password2Error.textContent = '';
+            password2Input.classList.remove('is-invalid');
+        }
+
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+});
+
+
     const togglePassword1 = document.querySelector('#togglePassword1');
     const password1 = document.querySelector('#{{ form.password1.id_for_label }}');
     const eyeIcon1 = document.querySelector('#eyeIcon1');
