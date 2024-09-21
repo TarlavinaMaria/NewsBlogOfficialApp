@@ -1,0 +1,141 @@
+{% extends 'news/base.html' %}
+
+<!--Новости активные-->
+
+{% block content %}
+    <h2 class="mb-4">Архивные новости</h2>
+
+    {% if not query and not tag %}
+        <p>Количество архивных новостей: {{ archived_count }}</p>
+    {% endif %}
+
+    {% if tag %}
+        <p>Количество архивных новостей по тегу "{{ tag.name }}": {{ news_count }}</p>
+    {% endif %}
+
+    {% if pub_date %}
+        <p>Количество актуальных новостей: {{ archived_count }}</p>
+    {% endif %}
+
+    <form method="get" action="{% url 'search_archived' %}" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Поиск по заголовку и содержанию" value="{{ query }}">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Поиск</button>
+            </div>
+        </div>
+    </form>
+
+    <form id="sortForm" method="get" action="{% url 'search_archived' %}" class="mb-4 d-flex flex-wrap align-items-center">
+        <input type="hidden" name="q" value="{{ query }}">
+        <div class="form-group mr-3">
+            <label for="sort_by" class="mr-2">Сортировать по:</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sort_by" id="sort_by_date" value="pub_date" {% if sort_by == 'pub_date' or not sort_by %}checked{% endif %}>
+                <label class="form-check-label" for="sort_by_date">Дате загрузки</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sort_by" id="sort_by_views" value="views" {% if sort_by == 'views' %}checked{% endif %}>
+                <label class="form-check-label" for="sort_by_views">Просмотрам</label>
+            </div>
+        </div>
+        <div class="form-group mr-3">
+            <label for="order" class="mr-2">Порядок:</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="order" id="order_desc" value="desc" {% if order == 'desc' or not order %}checked{% endif %}>
+                <label class="form-check-label" for="order_desc">По убыванию</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="order" id="order_asc" value="asc" {% if order == 'asc' %}checked{% endif %}>
+                <label class="form-check-label" for="order_asc">По возрастанию</label>
+            </div>
+        </div>
+    </form>
+
+    {% if query %}
+        <p>Найдено новостей: {{ search_count }}</p>
+    {% endif %}
+
+    <div id="newsList" class="row">
+        {% for news in news_list %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    {% if news.image %}
+                        <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}" class="news-image mb-3">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{% url 'news_detail' news.pk %}">{{ news.title|linebreaks }}</a></h5>
+                        <p class="card-text">{{ news.brief|linebreaks }}</p>
+                        <p class="card-text">Дата загрузки: {{ news.pub_date }}</p>
+                        <p class="card-text">Количество просмотров: {{ news.views }}</p>
+                        <p class="card-text">Теги: 
+                            {% for tag in news.tags.all %}
+                                <a href="{% url 'news_by_tag_status' tag.name 'archived' %}" class="badge badge-primary">{{ tag.name }}</a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация -->
+    <div class="d-flex justify-content-center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <!-- Стрелка влево к начальной странице -->
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}" aria-label="First">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- Предыдущая страница -->
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}" aria-label="Previous">
+                            <span aria-hidden="true">&lsaquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- Номера страниц -->
+                {% for num in paginator.page_range %}
+                    {% if num == page_obj.number %}
+                        <li class="page-item active"><a class="page-link" href="?page={{ num }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}">{{ num }}</a></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Следующая страница -->
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}" aria-label="Next">
+                            <span aria-hidden="true">&rsaquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <!-- Стрелка вправо к конечной странице -->
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ paginator.num_pages }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        document.querySelectorAll('input[name="sort_by"], input[name="order"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                document.getElementById('sortForm').submit();
+            });
+        });
+    </script>
+{% endblock %}

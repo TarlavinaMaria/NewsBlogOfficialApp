@@ -1,0 +1,98 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="mb-4 text-center">Регистрация</h2>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                <input type="text" name="username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="{{ form.username.id_for_label }}" required>
+                <div class="invalid-feedback">
+                    {% if form.username.errors %}
+                        {{ form.username.errors.0 }}
+                    {% else %}
+                        Пожалуйста, введите имя пользователя.
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                <input type="email" name="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="{{ form.email.id_for_label }}" required>
+                <div class="invalid-feedback">
+                    {% if form.email.errors %}
+                        {{ form.email.errors.0 }}
+                    {% else %}
+                        Пожалуйста, введите корректный email.
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Пароль</label>
+                <div class="input-group">
+                    <input type="password" name="password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" id="{{ form.password1.id_for_label }}" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword1">
+                            <i class="fa fa-eye" id="eyeIcon1"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="invalid-feedback">
+                    {% if form.password1.errors %}
+                        {{ form.password1.errors.0 }}
+                    {% else %}
+                        Пожалуйста, введите пароль.
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Подтверждение пароля</label>
+                <div class="input-group">
+                    <input type="password" name="password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" id="{{ form.password2.id_for_label }}" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
+                            <i class="fa fa-eye" id="eyeIcon2"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="invalid-feedback">
+                    {% if form.password2.errors %}
+                        {{ form.password2.errors.0 }}
+                    {% else %}
+                        Пожалуйста, подтвердите пароль.
+                    {% endif %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+        </form>
+    </div>
+</div>
+
+    <!--
+        Скрипт для пароля
+        Для поля пароля добавлен обработчик события click, который переключает тип поля ввода между password и text.
+    -->
+
+<script>
+    const togglePassword1 = document.querySelector('#togglePassword1');
+    const password1 = document.querySelector('#{{ form.password1.id_for_label }}');
+    const eyeIcon1 = document.querySelector('#eyeIcon1');
+
+    togglePassword1.addEventListener('click', function (e) {
+        const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
+        password1.setAttribute('type', type);
+        eyeIcon1.classList.toggle('fa-eye-slash');
+    });
+
+    const togglePassword2 = document.querySelector('#togglePassword2');
+    const password2 = document.querySelector('#{{ form.password2.id_for_label }}');
+    const eyeIcon2 = document.querySelector('#eyeIcon2');
+
+    togglePassword2.addEventListener('click', function (e) {
+        const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+        password2.setAttribute('type', type);
+        eyeIcon2.classList.toggle('fa-eye-slash');
+    });
+</script>
+{% endblock %}

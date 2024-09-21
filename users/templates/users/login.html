@@ -1,0 +1,59 @@
+{% extends 'news/base.html' %}
+
+<!--Форма для входа-->
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <h2 class="mb-4 text-center">Вход</h2>
+        <form method="post" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+                <input type="text" name="username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="{{ form.username.id_for_label }}" required>
+                <div class="invalid-feedback">
+                    {% if form.username.errors %}
+                        {{ form.username.errors.0 }}
+                    {% else %}
+                        Пожалуйста, введите имя пользователя.
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Пароль</label>
+                <div class="input-group">
+                    <input type="password" name="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" id="{{ form.password.id_for_label }}" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="fa fa-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="invalid-feedback">
+                    {% if form.password.errors %}
+                        {{ form.password.errors.0 }}
+                    {% else %}
+                        Пожалуйста, введите пароль.
+                    {% endif %}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Войти</button>
+        </form>
+    </div>
+</div>
+    <!--
+        Скрипт для пароля
+        Для поля пароля добавлен обработчик события click, который переключает тип поля ввода между password и text.
+    -->
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#{{ form.password.id_for_label }}');
+    const eyeIcon = document.querySelector('#eyeIcon');
+
+    togglePassword.addEventListener('click', function (e) {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        eyeIcon.classList.toggle('fa-eye-slash');
+    });
+</script>
+{% endblock %}

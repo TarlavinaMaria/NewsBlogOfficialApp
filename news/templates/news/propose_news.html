@@ -1,0 +1,73 @@
+{% extends 'news/base.html' %}
+
+<!--Предложить новость-->
+
+{% block content %}
+<h1>Предложить новость</h1>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-12">
+            {% if user.is_authenticated %}
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
+                    <input type="text" name="{{ form.title.name }}" id="{{ form.title.id_for_label }}" class="form-control form-control-lg" required>
+                    {% if form.title.errors %}
+                        <div class="alert alert-danger mt-1">{{ form.title.errors.as_text }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.brief.id_for_label }}" class="form-label">{{ form.brief.label }}</label>
+                    <textarea name="{{ form.brief.name }}" id="{{ form.brief.id_for_label }}" class="form-control" rows="3" required></textarea>
+                    {% if form.brief.errors %}
+                        <div class="alert alert-danger mt-1">{{ form.brief.errors.as_text }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.content.id_for_label }}" class="form-label">{{ form.content.label }}</label>
+                    <textarea name="{{ form.content.name }}" id="{{ form.content.id_for_label }}" class="form-control" rows="6" required></textarea>
+                    {% if form.content.errors %}
+                        <div class="alert alert-danger mt-1">{{ form.content.errors.as_text }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Теги:</label>
+                    <div class="tag-columns form-check form-switch">
+                        {% for tag in form.tags %}
+                            <div class="form-check">
+                                {{ tag.tag }}
+                                <label class="form-check-label" for="{{ tag.id_for_label }}">{{ tag.choice_label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if form.tags.errors %}
+                        <div class="alert alert-danger mt-1">{{ form.tags.errors.as_text }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.image.id_for_label }}" class="form-label">{{ form.image.label }}</label>
+                    <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class="form-control" accept="image/*">
+                    {% if form.image.errors %}
+                        <div class="alert alert-danger mt-1">{{ form.image.errors.as_text }}</div>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-dark">Отправить</button>
+            </form>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                Для того чтобы предложить новость, пожалуйста, <a href="{% url 'login' %}">авторизуйтесь</a>.
+                Если у вас нет аккаунта, <a href="{% url 'register' %}">зарегистрируйтесь</a>.
+            </div>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

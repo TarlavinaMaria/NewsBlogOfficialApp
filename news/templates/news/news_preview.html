@@ -1,0 +1,23 @@
+{% extends 'news/base.html' %}
+
+<!--Открытие новости в админ панели-->
+<!--Фильтр linebreaks, который автоматически преобразует переносы строк в соответствующие HTML-теги (<br> для одиночных переносов и <p> для блоков текста).-->
+
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ news.title }}</h2>
+            {% if news.image %}
+                <img src="{{ news.image.url }}" class="img-fluid mb-3" alt="{{ news.title }}" style="max-width: 100%; height: auto;">
+            {% endif %}
+            <p class="card-text">{{ news.content|linebreaks }}</p>
+            <p class="card-text">Дата загрузки: {{ news.pub_date }}</p>
+            <p class="card-text">Количество просмотров: {{ news.views }}</p>
+            <p class="card-text">Теги: 
+                {% for tag in news.tags.all %}
+                    <span class="badge badge-primary">{{ tag.name }}</span>
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+{% endblock %}
