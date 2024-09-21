@@ -29,15 +29,16 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ['*']
-# 'tarlavinamaria-newsblogofficial-f84e.twc1.net',
-#     'www.tarlavinamaria-newsblogofficial-f84e.twc1.net',
-#     '127.0.0.1',
-#     'localhost'
-# CSRF_TRUSTED_ORIGINS = [
-#     'https://tarlavinamaria-newsblogofficial-f84e.twc1.net',
-#     'https://www.tarlavinamaria-newsblogofficial-f84e.twc1.net',
-# ]
+ALLOWED_HOSTS = [
+    '24newsblog.ru',
+    'www.24newsblog.ru',
+    '127.0.0.1',
+    'localhost'
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://24newsblog.ru',
+    'https://www.24newsblog.ru',
+]
 
 if DEBUG:
     INTERNAL_IPS = [
