@@ -12,7 +12,6 @@
 
 1. Клонируйте репозиторий:
    git clone https://github.com/TarlavinaMaria/NewsBlogOfficial
-   cd news_blog
 
 2. Создайте виртуальное окружение:
    python -m venv venv

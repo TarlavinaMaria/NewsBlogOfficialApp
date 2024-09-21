@@ -14,4 +14,7 @@ urlpatterns = [
     path('search/', ActiveNewsSearchView.as_view(), name='search'),
     path('search/archived/', ArchivedNewsSearchView.as_view(), name='search_archived'),
     path('propose/', ProposeNewsView.as_view(), name='propose_news'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+if settings.DEBUG:
+    urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
