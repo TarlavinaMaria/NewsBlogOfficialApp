@@ -9,7 +9,7 @@ class Profile(models.Model):
     middle_name = models.CharField(max_length=100, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
-    default_photo = models.ImageField(upload_to='default_photos/', default='default_photos/default_profile.jpg')
+    default_photo = models.ImageField(upload_to='default_photos/', default='default_photos/default_profile.ico')
 
     def __str__(self):
         return self.user.username
