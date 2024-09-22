@@ -3,39 +3,46 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <h2 class="mb-4 text-center">Профиль</h2>
-        <div class="text-center mb-4">
-            {% if profile.photo %}
-                <img src="{{ profile.photo.url }}" alt="Фото профиля" class="img-thumbnail" style="width: 150px; height: 150px;">
-            {% else %}
-                <p>Фото не загружено</p>
-            {% endif %}
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2 class="mb-0">Профиль</h2>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <img src="{{ profile.get_photo_url }}" alt="Фото профиля" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px;">
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Имя</label>
+                            <p>{{ profile.first_name }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Фамилия</label>
+                            <p>{{ profile.last_name }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Отчество</label>
+                            <p>{{ profile.middle_name }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Дата рождения</label>
+                            <p>{{ profile.date_of_birth|default:"Не указана" }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Возраст</label>
+                            <p>{{ age|default:"Не указан" }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <a href="{% url 'edit_profile' %}" class="btn btn-primary btn-block">Изменить</a>
+                </div>
+            </div>
         </div>
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="{{ form.first_name.id_for_label }}">Имя</label>
-                <input type="text" name="first_name" class="form-control" id="{{ form.first_name.id_for_label }}" value="{{ form.first_name.value|default_if_none:'' }}">
-            </div>
-            <div class="form-group">
-                <label for="{{ form.last_name.id_for_label }}">Фамилия</label>
-                <input type="text" name="last_name" class="form-control" id="{{ form.last_name.id_for_label }}" value="{{ form.last_name.value|default_if_none:'' }}">
-            </div>
-            <div class="form-group">
-                <label for="{{ form.middle_name.id_for_label }}">Отчество</label>
-                <input type="text" name="middle_name" class="form-control" id="{{ form.middle_name.id_for_label }}" value="{{ form.middle_name.value|default_if_none:'' }}">
-            </div>
-            <div class="form-group">
-                <label for="{{ form.date_of_birth.id_for_label }}">Дата рождения</label>
-                <input type="date" name="date_of_birth" class="form-control" id="{{ form.date_of_birth.id_for_label }}" value="{{ form.date_of_birth.value|default_if_none:'' }}">
-            </div>
-            <div class="form-group">
-                <label for="{{ form.photo.id_for_label }}">Фото профиля</label>
-                <input type="file" name="photo" class="form-control-file" id="{{ form.photo.id_for_label }}">
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
-        </form>
     </div>
 </div>
 {% endblock %}

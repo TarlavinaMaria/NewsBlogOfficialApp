@@ -4,6 +4,9 @@ from django.contrib.auth import login, authenticate, logout
 from .forms import RegistrationForm, LoginForm
 from .forms import ProfileForm
 from .models import Profile
+from datetime import date
+
+
 
 class RegisterView(View):
     """Регистрация"""
@@ -80,7 +83,11 @@ class ProfileView(View):
         except Profile.DoesNotExist:
             profile = Profile.objects.create(user=request.user)
         form = ProfileForm(instance=profile)
-        return render(request, 'users/profile.html', {'form': form, 'profile': profile})
+        age = None
+        if profile.date_of_birth:
+            today = date.today()
+            age = today.year - profile.date_of_birth.year - ((today.month, today.day) < (profile.date_of_birth.month, profile.date_of_birth.day))
+        return render(request, 'users/profile.html', {'form': form, 'profile': profile, 'age': age})
 
     def post(self, request):
         try:
@@ -92,3 +99,25 @@ class ProfileView(View):
             form.save()
             return redirect('profile')
         return render(request, 'users/profile.html', {'form': form, 'profile': profile})
+    
+
+
+class EditProfileView(View):
+    def get(self, request):
+        try:
+            profile = request.user.profile
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(user=request.user)
+        form = ProfileForm(instance=profile)
+        return render(request, 'users/edit_profile.html', {'form': form})
+
+    def post(self, request):
+        try:
+            profile = request.user.profile
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(user=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+        return render(request, 'users/edit_profile.html', {'form': form})
