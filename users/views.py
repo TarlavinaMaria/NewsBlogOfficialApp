@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth import login, authenticate, logout
 from .forms import RegistrationForm, LoginForm
-
+from .forms import ProfileForm
+from .models import Profile
 
 class RegisterView(View):
     """Регистрация"""
@@ -71,3 +72,23 @@ class LogoutView(View):
         logout(request)
         request.session.flush() # Удаляем все данные сессии
         return redirect('news_list')
+    
+class ProfileView(View):
+    def get(self, request):
+        try:
+            profile = request.user.profile
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(user=request.user)
+        form = ProfileForm(instance=profile)
+        return render(request, 'users/profile.html', {'form': form})
+
+    def post(self, request):
+        try:
+            profile = request.user.profile
+        except Profile.DoesNotExist:
+            profile = Profile.objects.create(user=request.user)
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+        return render(request, 'users/profile.html', {'form': form})

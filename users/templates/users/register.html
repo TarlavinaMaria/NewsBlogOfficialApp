@@ -119,10 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
             password1Error.textContent = 'Пароль должен содержать минимум 8 символов, включая буквы и цифры.';
             password1Input.classList.add('is-invalid');
             return false;
-        } else if (password1Input.value.includes('{')) {
-            password1Error.textContent = 'Пароль не должен содержать символ "{".';
-            password1Input.classList.add('is-invalid');
-            return false;
         } else {
             password1Error.textContent = '';
             password1Input.classList.remove('is-invalid');
