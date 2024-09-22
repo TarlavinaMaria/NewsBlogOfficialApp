@@ -1,136 +1,206 @@
-{% extends 'news/base.html' %}
-
-{% block content %}
+{% extends 'news/base.html' %} {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <h2 class="mb-4 text-center">Регистрация</h2>
-        <form method="post" id="registrationForm" novalidate>
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
-                <input type="text" name="username" class="form-control" id="{{ form.username.id_for_label }}" required>
-                <div class="invalid-feedback" id="usernameError"></div>
-            </div>
-            <div class="form-group">
-                <label for="{{ form.email.id_for_label }}">Email</label>
-                <input type="email" name="email" class="form-control" id="{{ form.email.id_for_label }}" required>
-                <div class="invalid-feedback" id="emailError"></div>
-            </div>
-            <div class="form-group">
-                <label for="{{ form.password1.id_for_label }}">Пароль</label>
-                <div class="input-group">
-                    <input type="password" name="password1" class="form-control" id="{{ form.password1.id_for_label }}" required>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="togglePassword1">
-                            <i class="fa fa-eye" id="eyeIcon1"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="invalid-feedback" id="password1Error"></div>
-            </div>
-            <div class="form-group">
-                <label for="{{ form.password2.id_for_label }}">Подтверждение пароля</label>
-                <div class="input-group">
-                    <input type="password" name="password2" class="form-control" id="{{ form.password2.id_for_label }}" required>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
-                            <i class="fa fa-eye" id="eyeIcon2"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="invalid-feedback" id="password2Error"></div>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
-        </form>
-    </div>
+  <div class="col-md-6">
+    <h2 class="mb-4 text-center">Регистрация</h2>
+    <form method="post" id="registrationForm" novalidate>
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="{{ form.username.id_for_label }}">Имя пользователя</label>
+        <input
+          type="text"
+          name="username"
+          class="form-control"
+          id="{{ form.username.id_for_label }}"
+          required
+        />
+        <div class="invalid-feedback" id="usernameError"></div>
+      </div>
+      <div class="form-group">
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        <input
+          type="email"
+          name="email"
+          class="form-control"
+          id="{{ form.email.id_for_label }}"
+          required
+        />
+        <div class="invalid-feedback" id="emailError"></div>
+      </div>
+      <div class="form-group">
+        <label for="{{ form.password1.id_for_label }}">Пароль</label>
+        <div class="input-group">
+          <input
+            type="password"
+            name="password1"
+            class="form-control"
+            id="{{ form.password1.id_for_label }}"
+            required
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="togglePassword1"
+            >
+              <i class="fa fa-eye" id="eyeIcon1"></i>
+            </button>
+          </div>
+        </div>
+        <div class="invalid-feedback" id="password1Error"></div>
+      </div>
+      <div class="form-group">
+        <label for="{{ form.password2.id_for_label }}"
+          >Подтверждение пароля</label
+        >
+        <div class="input-group">
+          <input
+            type="password"
+            name="password2"
+            class="form-control"
+            id="{{ form.password2.id_for_label }}"
+            required
+          />
+          <div class="input-group-append">
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              id="togglePassword2"
+            >
+              <i class="fa fa-eye" id="eyeIcon2"></i>
+            </button>
+          </div>
+        </div>
+        <div class="invalid-feedback" id="password2Error"></div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">
+        Зарегистрироваться
+      </button>
+    </form>
+  </div>
 </div>
 
-    <!--
-        Скрипт для пароля
-        Для поля пароля добавлен обработчик события click, который переключает тип поля ввода между password и text.
-    -->
-
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('registrationForm');
-    const usernameInput = document.getElementById('{{ form.username.id_for_label }}');
-    const emailInput = document.getElementById('{{ form.email.id_for_label }}');
-    const password1Input = document.getElementById('{{ form.password1.id_for_label }}');
-    const password2Input = document.getElementById('{{ form.password2.id_for_label }}');
-    const usernameError = document.getElementById('usernameError');
-    const emailError = document.getElementById('emailError');
-    const password1Error = document.getElementById('password1Error');
-    const password2Error = document.getElementById('password2Error');
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("registrationForm");
+    const usernameInput = document.getElementById(
+      "{{ form.username.id_for_label }}"
+    );
+    const emailInput = document.getElementById("{{ form.email.id_for_label }}");
+    const password1Input = document.getElementById(
+      "{{ form.password1.id_for_label }}"
+    );
+    const password2Input = document.getElementById(
+      "{{ form.password2.id_for_label }}"
+    );
+    const usernameError = document.getElementById("usernameError");
+    const emailError = document.getElementById("emailError");
+    const password1Error = document.getElementById("password1Error");
+    const password2Error = document.getElementById("password2Error");
 
-    form.addEventListener('submit', function(event) {
-        let isValid = true;
+    function validateUsername() {
+      if (usernameInput.value.trim() === "") {
+        usernameError.textContent = "Пожалуйста, введите имя пользователя.";
+        usernameInput.classList.add("is-invalid");
+        return false;
+      } else {
+        usernameError.textContent = "";
+        usernameInput.classList.remove("is-invalid");
+        return true;
+      }
+    }
 
-        // Валидация имени пользователя
-        if (usernameInput.value.trim() === '') {
-            usernameError.textContent = 'Пожалуйста, введите имя пользователя.';
-            usernameInput.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            usernameError.textContent = '';
-            usernameInput.classList.remove('is-invalid');
-        }
+    function validateEmail() {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(emailInput.value)) {
+        emailError.textContent = "Пожалуйста, введите корректный email.";
+        emailInput.classList.add("is-invalid");
+        return false;
+      } else if (!emailInput.value.includes("@")) {
+        emailError.textContent = 'Email должен содержать символ "@".';
+        emailInput.classList.add("is-invalid");
+        return false;
+      } else {
+        emailError.textContent = "";
+        emailInput.classList.remove("is-invalid");
+        return true;
+      }
+    }
 
-        // Валидация email
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(emailInput.value)) {
-            emailError.textContent = 'Пожалуйста, введите корректный email.';
-            emailInput.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            emailError.textContent = '';
-            emailInput.classList.remove('is-invalid');
-        }
+    function validatePassword1() {
+      const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+      if (password1Input.value.trim() === "") {
+        password1Error.textContent = "Пожалуйста, введите пароль.";
+        password1Input.classList.add("is-invalid");
+        return false;
+      } else if (!passwordPattern.test(password1Input.value)) {
+        password1Error.textContent =
+          "Пароль должен содержать минимум 8 символов, включая буквы и цифры.";
+        password1Input.classList.add("is-invalid");
+        return false;
+      } else {
+        password1Error.textContent = "";
+        password1Input.classList.remove("is-invalid");
+        return true;
+      }
+    }
 
-        // Валидация пароля
-        if (password1Input.value.trim() === '') {
-            password1Error.textContent = 'Пожалуйста, введите пароль.';
-            password1Input.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            password1Error.textContent = '';
-            password1Input.classList.remove('is-invalid');
-        }
+    function validatePassword2() {
+      if (
+        password2Input.value.trim() === "" ||
+        password2Input.value !== password1Input.value
+      ) {
+        password2Error.textContent = "Пароли не совпадают.";
+        password2Input.classList.add("is-invalid");
+        return false;
+      } else {
+        password2Error.textContent = "";
+        password2Input.classList.remove("is-invalid");
+        return true;
+      }
+    }
 
-        // Валидация подтверждения пароля
-        if (password2Input.value.trim() === '' || password2Input.value !== password1Input.value) {
-            password2Error.textContent = 'Пароли не совпадают.';
-            password2Input.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            password2Error.textContent = '';
-            password2Input.classList.remove('is-invalid');
-        }
+    usernameInput.addEventListener("input", validateUsername);
+    emailInput.addEventListener("input", validateEmail);
+    password1Input.addEventListener("input", validatePassword1);
+    password2Input.addEventListener("input", validatePassword2);
 
-        if (!isValid) {
-            event.preventDefault();
-        }
+    form.addEventListener("submit", function (event) {
+      let isValid =
+        validateUsername() &&
+        validateEmail() &&
+        validatePassword1() &&
+        validatePassword2();
+
+      if (!isValid) {
+        event.preventDefault();
+      }
     });
-});
 
+    const togglePassword1 = document.querySelector("#togglePassword1");
+    const password1 = document.querySelector(
+      "#{{ form.password1.id_for_label }}"
+    );
+    const eyeIcon1 = document.querySelector("#eyeIcon1");
 
-    const togglePassword1 = document.querySelector('#togglePassword1');
-    const password1 = document.querySelector('#{{ form.password1.id_for_label }}');
-    const eyeIcon1 = document.querySelector('#eyeIcon1');
-
-    togglePassword1.addEventListener('click', function (e) {
-        const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
-        password1.setAttribute('type', type);
-        eyeIcon1.classList.toggle('fa-eye-slash');
+    togglePassword1.addEventListener("click", function (e) {
+      const type =
+        password1.getAttribute("type") === "password" ? "text" : "password";
+      password1.setAttribute("type", type);
+      eyeIcon1.classList.toggle("fa-eye-slash");
     });
 
-    const togglePassword2 = document.querySelector('#togglePassword2');
-    const password2 = document.querySelector('#{{ form.password2.id_for_label }}');
-    const eyeIcon2 = document.querySelector('#eyeIcon2');
+    const togglePassword2 = document.querySelector("#togglePassword2");
+    const password2 = document.querySelector(
+      "#{{ form.password2.id_for_label }}"
+    );
+    const eyeIcon2 = document.querySelector("#eyeIcon2");
 
-    togglePassword2.addEventListener('click', function (e) {
-        const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
-        password2.setAttribute('type', type);
-        eyeIcon2.classList.toggle('fa-eye-slash');
+    togglePassword2.addEventListener("click", function (e) {
+      const type =
+        password2.getAttribute("type") === "password" ? "text" : "password";
+      password2.setAttribute("type", type);
+      eyeIcon2.classList.toggle("fa-eye-slash");
     });
+  });
 </script>
 {% endblock %}
