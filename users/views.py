@@ -80,7 +80,7 @@ class ProfileView(View):
         except Profile.DoesNotExist:
             profile = Profile.objects.create(user=request.user)
         form = ProfileForm(instance=profile)
-        return render(request, 'users/profile.html', {'form': form})
+        return render(request, 'users/profile.html', {'form': form, 'profile': profile})
 
     def post(self, request):
         try:
@@ -91,4 +91,4 @@ class ProfileView(View):
         if form.is_valid():
             form.save()
             return redirect('profile')
-        return render(request, 'users/profile.html', {'form': form})
+        return render(request, 'users/profile.html', {'form': form, 'profile': profile})

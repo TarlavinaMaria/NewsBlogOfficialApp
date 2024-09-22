@@ -32,6 +32,9 @@
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if user.profile.photo %}
+                                <img src="{{ user.profile.photo.url }}" alt="Фото профиля" class="rounded-circle" style="width: 30px; height: 30px;">
+                            {% endif %}
                             Вы вошли как {{ user.username }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
