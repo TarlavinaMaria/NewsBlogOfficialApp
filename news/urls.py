@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import NewsListView, NewsDetailView, NewsByTagView, ArchivedNewsView, ActiveNewsSearchView, ArchivedNewsSearchView, ProposeNewsView
+from .views import NewsListView, NewsDetailView, NewsByTagView, ArchivedNewsView, ActiveNewsSearchView, ArchivedNewsSearchView, ProposeNewsView, SiteInformationView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -14,6 +14,7 @@ urlpatterns = [
     path('search/', ActiveNewsSearchView.as_view(), name='search'),
     path('search/archived/', ArchivedNewsSearchView.as_view(), name='search_archived'),
     path('propose/', ProposeNewsView.as_view(), name='propose_news'),
+    path('site-information/', SiteInformationView.as_view(), name='site_information'),
 ] 
 
 if settings.DEBUG:

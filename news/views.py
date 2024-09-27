@@ -1,5 +1,5 @@
 from django.db.models import Q
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from .models import News, Tag
@@ -235,3 +235,6 @@ class ProposeNewsView(CreateView):
         news.save()
         form.save_m2m()  # Сохраняем связанные теги
         return super().form_valid(form)
+    
+class SiteInformationView(TemplateView):
+    template_name = 'news/site_information.html'
