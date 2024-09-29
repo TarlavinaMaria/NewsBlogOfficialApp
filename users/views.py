@@ -28,6 +28,8 @@ class RegisterView(View):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # Создаем профиль пользователя автоматически
+            Profile.objects.create(user=user)
             login(request, user)
             return redirect('news_list')
         return render(request, 'users/register.html', {'form': form})
