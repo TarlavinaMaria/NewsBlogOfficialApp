@@ -2,10 +2,12 @@ from django.db.models import Q
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from .models import News, Tag
 from .forms import NewsForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib.auth.models import User
 
 class NewsListView(ListView):
     """ 
@@ -232,9 +234,11 @@ class ProposeNewsView(CreateView):
     def form_valid(self, form):
         news = form.save(commit=False)
         news.status = 'draft'  # Устанавливаем статус "Не проверено"
+        news.author = self.request.user if self.request.user.is_authenticated else User.objects.get(id=1)  # Устанавливаем автора, если пользователь аутентифицирован, иначе администратора
         news.save()
         form.save_m2m()  # Сохраняем связанные теги
         return super().form_valid(form)
-    
+
+
 class SiteInformationView(TemplateView):
     template_name = 'news/site_information.html'
