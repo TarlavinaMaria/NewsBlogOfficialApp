@@ -6,3 +6,6 @@ class NewsConfig(AppConfig):
     name = 'news'
     verbose_name = 'Новость' # имя модели в единственном числе
     verbose_name_plural = 'Новости' # имя модели во множественном числе
+
+    def ready(self):
+        import news.signals

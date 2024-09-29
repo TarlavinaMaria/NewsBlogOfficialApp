@@ -500,6 +500,8 @@
         "views": 52,
         "status": "published",
         "image": "news_images/58e0ba99430257fa1fc4df0d9d7d6295_miRfbcX.jpeg",
+        "author": 1,
+        "notified": false,
         "tags": [
             31
         ]
@@ -516,6 +518,8 @@
         "views": 27,
         "status": "published",
         "image": "news_images/ad30b02b50f627a1b20a85653a15a59c.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             33,
             34
@@ -533,6 +537,8 @@
         "views": 151,
         "status": "published",
         "image": "news_images/aee5bef9b39a4865c47e7e28d8285814.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             35,
             36
@@ -550,6 +556,8 @@
         "views": 530,
         "status": "published",
         "image": "news_images/f910f1a1d806b471ddec05b41a91ab63.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             37,
             38,
@@ -569,6 +577,8 @@
         "views": 707,
         "status": "published",
         "image": "news_images/58e0ba99430257fa1fc4df0d9d7d6295_1.jpeg",
+        "author": 1,
+        "notified": false,
         "tags": [
             38,
             41
@@ -586,6 +596,8 @@
         "views": 0,
         "status": "published",
         "image": "news_images/c608304c19378d881e3c579c80992313.jpeg",
+        "author": 1,
+        "notified": false,
         "tags": [
             21,
             42,
@@ -604,6 +616,8 @@
         "views": 490,
         "status": "archived",
         "image": "news_images/982624244ed3e2bf6a9415ca8cd63cf6.png",
+        "author": 1,
+        "notified": false,
         "tags": [
             44,
             45
@@ -621,6 +635,8 @@
         "views": 684,
         "status": "archived",
         "image": "news_images/10d5f73435832ac0e48135d5dcec1aee.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             45,
             46,
@@ -639,6 +655,8 @@
         "views": 540,
         "status": "archived",
         "image": "news_images/5c5bcc0e315d1afbff7c9045c3198431.png",
+        "author": 1,
+        "notified": false,
         "tags": [
             23,
             25,
@@ -657,6 +675,8 @@
         "views": 600,
         "status": "archived",
         "image": "news_images/23dbdd3525932874a0e73d6a7d6fb6b6.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             23,
             44
@@ -674,6 +694,8 @@
         "views": 800,
         "status": "archived",
         "image": "news_images/85f8aa438bbf949528c145de2d220a9f.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             4,
             7,
@@ -692,6 +714,8 @@
         "views": 0,
         "status": "draft",
         "image": "news_images/09baf2e2344ed187f9027043b14e182b.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             3,
             7,
@@ -711,6 +735,8 @@
         "views": 0,
         "status": "draft",
         "image": "news_images/nyvcvdi4r-tc08y41t36glp1xsa.jpeg",
+        "author": 1,
+        "notified": false,
         "tags": [
             4,
             31,
@@ -729,6 +755,8 @@
         "views": 406,
         "status": "published",
         "image": "news_images/e8f05796534f3aca10b10926613a83ca.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             38,
             49,
@@ -747,6 +775,8 @@
         "views": 6,
         "status": "archived",
         "image": "news_images/44af4e9e4bbd8befddc6ad27cabb7c48.png",
+        "author": 1,
+        "notified": false,
         "tags": [
             51,
             52
@@ -764,6 +794,8 @@
         "views": 0,
         "status": "published",
         "image": "news_images/lj4dgyharbbxvb7hyfbpwl5r3ze.jpeg",
+        "author": 1,
+        "notified": false,
         "tags": [
             23,
             38,
@@ -782,6 +814,8 @@
         "views": 10,
         "status": "published",
         "image": "news_images/b62c84055553ae1900811bf3d033bc3f.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             38,
             65
@@ -799,6 +833,8 @@
         "views": 25,
         "status": "archived",
         "image": "news_images/e87a79225e3e8c9d4b8bf04c96f103b6.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             3,
             4,
@@ -818,6 +854,8 @@
         "views": 26,
         "status": "published",
         "image": "news_images/7f658abc128f6a09f565f07ef91e8145.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             66,
             67
@@ -835,6 +873,8 @@
         "views": 102,
         "status": "published",
         "image": "news_images/a18e28019dd011b321743d21359ca0b3.jpeg",
+        "author": 1,
+        "notified": false,
         "tags": [
             4,
             23,
@@ -853,6 +893,8 @@
         "views": 50,
         "status": "published",
         "image": "news_images/fafcecb8a83925fcb92dec53b134c1c4.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             21,
             42,
@@ -871,6 +913,8 @@
         "views": 0,
         "status": "published",
         "image": "news_images/a6sub99qi0fjy_wwiw-bsfx6evc.png",
+        "author": 1,
+        "notified": false,
         "tags": [
             70,
             71
@@ -888,6 +932,8 @@
         "views": 14,
         "status": "published",
         "image": "news_images/8c98607fe6d2c410fbb6debc685c7d37.png",
+        "author": 1,
+        "notified": false,
         "tags": [
             2,
             38
@@ -905,6 +951,8 @@
         "views": 48,
         "status": "published",
         "image": "news_images/d84c5a7410d9fd06bb350e25cac7ccc1.jpg",
+        "author": 1,
+        "notified": false,
         "tags": [
             4
         ]
