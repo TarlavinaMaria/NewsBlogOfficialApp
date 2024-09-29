@@ -25,7 +25,6 @@ def send_telegram_notification(sender, instance, created, **kwargs):
             f"Краткое описание: {instance.brief}\n"
             f"Текст новости: {content_truncated}\n"
             f"Дата публикации: {pub_date_formatted}\n"
-            f"Теги: {', '.join([tag.name for tag in instance.tags.all()])}\n"
             f"Изображение: {'Да' if instance.image else 'Нет'}\n"
             f"Автор: {instance.author.username}"
         )
