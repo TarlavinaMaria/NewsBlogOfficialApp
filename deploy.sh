@@ -1,0 +1,1 @@
+python3 manage.py migrate && echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@mail.ru', '7nO=8_\@sv')" | python3 manage.py shell && python3 manage.py loaddata base.json
