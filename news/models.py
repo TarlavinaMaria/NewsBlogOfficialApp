@@ -4,12 +4,14 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 class Tag(models.Model):
+    """Класс для тегов новостей"""
     name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
 
 class News(models.Model):
+    """Класс для новостей"""
     STATUS_CHOICES = (
         ('draft', 'Не проверено'),
         ('published', 'Проверено'),

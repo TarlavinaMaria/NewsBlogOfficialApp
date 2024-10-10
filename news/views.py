@@ -241,4 +241,9 @@ class ProposeNewsView(CreateView):
 
 
 class SiteInformationView(TemplateView):
+    """
+    Класс для получения информации о сайте. 
+    Атрибуты:
+    - template_name: Шаблон, который будет отображаться (news/site_information.html).
+    """
     template_name = 'news/site_information.html'
