@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.views.generic import View
+from django.views.generic import View, ListView, DetailView
+from news.models import News
 from django.contrib.auth import login, authenticate, logout
 from .forms import RegistrationForm, LoginForm
 from .forms import ProfileForm
@@ -157,3 +158,26 @@ class EditProfileView(View):
             form.save()
             return redirect('profile')
         return render(request, 'users/edit_profile.html', {'form': form})
+
+class AuthorArticlesView(ListView):
+    model = News
+    template_name = 'users/author_articles.html'
+    context_object_name = 'articles'
+    paginate_by = 10  # Пагинация, если статей много
+
+    def get_queryset(self):
+        queryset = News.objects.filter(author_id=self.kwargs['author_id'])
+        status = self.request.GET.get('status', 'all')
+        if status != 'all':
+            queryset = queryset.filter(status=status)
+        return queryset.order_by('-pub_date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['status'] = self.request.GET.get('status', 'all')
+        return context
+    
+class ArticleDetailView(DetailView):
+    model = News
+    template_name = 'users/article_detail.html'
+    context_object_name = 'article'

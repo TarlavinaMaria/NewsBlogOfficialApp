@@ -92,3 +92,17 @@ body {
   background-color: #0056b3;
   border-color: #0056b3;
 }
+
+/* список статей в профиле */
+.card-header {
+  font-weight: bold;
+}
+.card-title {
+  font-size: 1.5rem;
+}
+.card-text {
+  font-size: 1.1rem;
+}
+.text-muted {
+  font-size: 0.9rem;
+}

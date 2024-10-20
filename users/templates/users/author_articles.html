@@ -1,0 +1,104 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <h2 class="mb-0">Мои статьи</h2>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="mb-4">
+                        <div class="form-row align-items-center">
+                            <div class="col-auto">
+                                <label for="status" class="sr-only">Статус</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="all" {% if status == 'all' %}selected{% endif %}>Все статьи</option>
+                                    <option value="published" {% if status == 'published' %}selected{% endif %}>Проверено</option>
+                                    <option value="draft" {% if status == 'draft' %}selected{% endif %}>Не проверено</option>
+                                    <option value="archived" {% if status == 'archived' %}selected{% endif %}>Архив</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">Фильтровать</button>
+                            </div>
+                            <div class="col-auto ml-auto">
+                                <a href="{% url 'profile' %}" class="btn btn-secondary">Назад в профиль</a>
+                            </div>
+                        </div>
+                    </form>
+                    {% for article in articles %}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ article.title }}</h4>
+                            <p class="card-text">{{ article.brief }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Статус: {{ article.get_status_display }}</small>
+                                <small class="text-muted">Дата публикации: {{ article.pub_date|date:"d.m.Y H:i" }}</small>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <a href="{% url 'article_detail' article.pk %}" class="btn btn-primary">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center">У вас пока нет статей.</p>
+                    {% endfor %}
+                    <!-- Пагинация -->
+                    <div class="d-flex justify-content-center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <!-- Стрелка влево к начальной странице -->
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}" aria-label="First">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                <!-- Предыдущая страница -->
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}" aria-label="Previous">
+                                            <span aria-hidden="true">&lsaquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                <!-- Номера страниц -->
+                                {% for num in paginator.page_range %}
+                                    {% if num == page_obj.number %}
+                                        <li class="page-item active"><a class="page-link" href="?page={{ num }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}">{{ num }}</a></li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ num }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}">{{ num }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+
+                                <!-- Следующая страница -->
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}" aria-label="Next">
+                                            <span aria-hidden="true">&rsaquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+
+                                <!-- Стрелка вправо к конечной странице -->
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ paginator.num_pages }}&sort_by={{ sort_by }}&order={{ order }}&q={{ query }}" aria-label="Last">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
