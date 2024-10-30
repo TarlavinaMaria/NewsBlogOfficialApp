@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+
 class Tag(models.Model):
     """Класс для тегов новостей"""
     name = models.CharField(max_length=50, unique=True)
@@ -37,5 +38,19 @@ class News(models.Model):
         self.views += 1
         self.save(update_fields=['views'])
 
+
+class Comment(models.Model):
+    """Модель для комментариев к новостям"""
+    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='liked_comments', blank=True)
+
+    def __str__(self):
+        return f"Comment by {self.author.username} on {self.news.title}"
+
+    def total_likes(self):
+        return self.likes.count()
 
         

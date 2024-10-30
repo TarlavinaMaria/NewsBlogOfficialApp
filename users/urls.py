@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterView, LoginView, LogoutView, ProfileView, EditProfileView, AuthorArticlesView, ArticleDetailView
+from .views import RegisterView, LoginView, LogoutView, ProfileView, EditProfileView, AuthorArticlesView, ArticleDetailView, UserActivityView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('profile/edit/', EditProfileView.as_view(), name='edit_profile'),
     path('author/<int:author_id>/articles/', AuthorArticlesView.as_view(), name='author_articles'),
     path('article/<int:pk>/', ArticleDetailView.as_view(), name='article_detail'),
+    path('profile/activity/', UserActivityView.as_view(), name='user_activity'),
 ]
 
 if settings.DEBUG:

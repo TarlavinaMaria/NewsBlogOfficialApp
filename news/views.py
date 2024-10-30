@@ -1,13 +1,17 @@
 from django.db.models import Q
-from django.views.generic import ListView, DetailView, CreateView, TemplateView
-from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, DeleteView
+from django.views import View
+from django.urls import reverse_lazy, reverse
+from django.shortcuts import get_object_or_404, redirect
 from django.shortcuts import render
-from .models import News, Tag
-from .forms import NewsForm
+from .models import News, Tag, Comment
+from .forms import NewsForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
+
 
 class NewsListView(ListView):
     """ 
@@ -49,6 +53,61 @@ class NewsDetailView(DetailView):
         news = super().get_object(queryset)
         news.increase_views()
         return news
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = self.object.comments.all().order_by('-created_at')
+        comment_form = CommentForm()
+        comment_form.fields['content'].widget.attrs.update({'class': 'form-control'})
+        context['comment_form'] = comment_form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if 'content' in request.POST:
+            # Обработка добавления комментария
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.news = self.object
+                comment.author = request.user
+                comment.save()
+                return redirect('news_detail', pk=self.object.pk)
+        elif 'like_comment' in request.POST:
+            # Обработка лайка комментария
+            comment_id = request.POST.get('like_comment')
+            comment = get_object_or_404(Comment, id=comment_id)
+            if request.user in comment.likes.all():
+                comment.likes.remove(request.user)
+            else:
+                comment.likes.add(request.user)
+            return redirect('news_detail', pk=self.object.pk)
+
+        context = self.get_context_data(object=self.object)
+        context['comment_form'] = form
+        return render(request, self.template_name, context)
+    
+class DeleteCommentView(DeleteView):
+    model = Comment
+    success_url = reverse_lazy('news_list')
+
+    def get_success_url(self):
+        return reverse_lazy('news_detail', kwargs={'pk': self.object.news.id})
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if not (self.request.user == obj.author or self.request.user.is_staff):
+            raise PermissionDenied("You do not have permission to delete this comment.")
+        return obj
+
+class LikeCommentView(View):
+    def post(self, request, comment_id):
+        comment = get_object_or_404(Comment, id=comment_id)
+        if request.user in comment.likes.all():
+            comment.likes.remove(request.user)
+        else:
+            comment.likes.add(request.user)
+        return JsonResponse({'likes': comment.total_likes()})
 
 class NewsByTagView(ListView):
     """

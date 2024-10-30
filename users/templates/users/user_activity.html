@@ -1,0 +1,53 @@
+{% extends 'news/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <h2 class="mb-0">Активность пользователя</h2>
+                </div>
+                <div class="card-body">
+                    <h3>Лайкнутые комментарии</h3>
+                    {% for comment in comments %}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ comment.news.title }}</h4>
+                            <p class="card-text">{{ comment.content }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Автор: {{ comment.author.username }}</small>
+                                <small class="text-muted">Дата создания: {{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <a href="{% url 'news_detail' comment.news.id %}" class="btn btn-primary">Перейти к новости</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center">Вы еще не лайкнули ни одного комментария.</p>
+                    {% endfor %}
+
+                    <h3 class="mt-5">Ваши комментарии</h3>
+                    {% for comment in user_comments %}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ comment.news.title }}</h4>
+                            <p class="card-text">{{ comment.content }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Дата создания: {{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <a href="{% url 'news_detail' comment.news.id %}" class="btn btn-primary">Перейти к новости</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center">Вы еще не оставили ни одного комментария.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

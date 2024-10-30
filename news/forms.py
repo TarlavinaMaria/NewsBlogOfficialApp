@@ -1,5 +1,5 @@
 from django import forms
-from .models import News, Tag
+from .models import News, Tag, Comment
 
 class NewsForm(forms.ModelForm):
     """ 
@@ -17,3 +17,13 @@ class NewsForm(forms.ModelForm):
         """
         model = News
         fields = ['title', 'brief', 'content', 'tags', 'image']
+
+
+class CommentForm(forms.ModelForm):
+    """Форма для добавления комментариев"""
+    class Meta:
+        model = Comment
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 4}),
+        }

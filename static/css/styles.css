@@ -106,3 +106,38 @@ body {
 .text-muted {
   font-size: 0.9rem;
 }
+/* Коментарии*/
+.comment-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.comment-card .card-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.comment-card .card-text {
+    font-size: 16px;
+    color: #333;
+}
+
+.comment-card .text-muted {
+    font-size: 14px;
+    color: #777;
+}
+
+.comment-form .form-control {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.comment-form .btn-primary {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 16px;
+}

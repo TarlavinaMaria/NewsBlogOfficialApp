@@ -6,6 +6,7 @@ from .forms import RegistrationForm, LoginForm
 from .forms import ProfileForm
 from .models import Profile
 from datetime import date
+from news.models import Comment
 
 
 class RegisterView(View):
@@ -181,3 +182,16 @@ class ArticleDetailView(DetailView):
     model = News
     template_name = 'users/article_detail.html'
     context_object_name = 'article'
+
+class UserActivityView(ListView):
+    model = Comment
+    template_name = 'users/user_activity.html'
+    context_object_name = 'comments'
+
+    def get_queryset(self):
+        return Comment.objects.filter(likes=self.request.user).order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_comments'] = Comment.objects.filter(author=self.request.user).order_by('-created_at')
+        return context
