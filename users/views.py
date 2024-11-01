@@ -161,37 +161,44 @@ class EditProfileView(View):
         return render(request, 'users/edit_profile.html', {'form': form})
 
 class AuthorArticlesView(ListView):
+    """Просмотр статей автора"""
     model = News
     template_name = 'users/author_articles.html'
     context_object_name = 'articles'
     paginate_by = 10  # Пагинация, если статей много
 
     def get_queryset(self):
-        queryset = News.objects.filter(author_id=self.kwargs['author_id'])
-        status = self.request.GET.get('status', 'all')
-        if status != 'all':
+        """Фильтрация статей по автору и статусу"""
+        queryset = News.objects.filter(author_id=self.kwargs['author_id']) # Фильтрует статьи по author_id, который передается через URL.
+        status = self.request.GET.get('status', 'all') # Получает значение параметра status из GET-запроса. Если параметр не указан, по умолчанию используется значение 'all'.
+        if status != 'all': # Если статус не равен 'all', фильтрует статьи по статусу.
             queryset = queryset.filter(status=status)
-        return queryset.order_by('-pub_date')
+        return queryset.order_by('-pub_date') # Сортирует статьи по дате публикации в порядке убывания.
 
     def get_context_data(self, **kwargs):
+        """ Добавляет в контекст данные о статусе статей"""
         context = super().get_context_data(**kwargs)
         context['status'] = self.request.GET.get('status', 'all')
         return context
     
 class ArticleDetailView(DetailView):
+    """Просмотр статьи"""
     model = News
     template_name = 'users/article_detail.html'
     context_object_name = 'article'
 
 class UserActivityView(ListView):
+    """Просмотр активности пользователя"""
     model = Comment
     template_name = 'users/user_activity.html'
     context_object_name = 'comments'
 
     def get_queryset(self):
+        """Фильтрация комментариев по пользователю"""
         return Comment.objects.filter(likes=self.request.user).order_by('-created_at')
 
     def get_context_data(self, **kwargs):
+        """Добавляет в контекст данные о пользователе"""
         context = super().get_context_data(**kwargs)
         context['user_comments'] = Comment.objects.filter(author=self.request.user).order_by('-created_at')
         return context

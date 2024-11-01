@@ -49,4 +49,4 @@ class CommentAdmin(admin.ModelAdmin):
 
 admin.site.register(News, NewsAdmin)
 admin.site.register(Tag)
-admin.site.register(Comment, CommentAdmin)  # Регистрируем модель Comment с классом CommentAdmin
+admin.site.register(Comment, CommentAdmin) 

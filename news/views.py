@@ -55,59 +55,55 @@ class NewsDetailView(DetailView):
         return news
     
     def get_context_data(self, **kwargs):
+        """ Метод для добавления комментариев и формы добавления комментариев в контекст. """
         context = super().get_context_data(**kwargs)
-        context['comments'] = self.object.comments.all().order_by('-created_at')
-        comment_form = CommentForm()
-        comment_form.fields['content'].widget.attrs.update({'class': 'form-control'})
-        context['comment_form'] = comment_form
+        context['comments'] = self.object.comments.all().order_by('-created_at') # Сортируем комментарии по дате создания в порядке убывания
+        comment_form = CommentForm() # Cоздаем форму для добавления комментариев
+        comment_form.fields['content'].widget.attrs.update({'class': 'form-control'}) # Добавляем класс для стилизации поля формы
+        context['comment_form'] = comment_form # Добавляем форму в контекст
         return context
 
     def post(self, request, *args, **kwargs):
+        """ Метод для обработки POST-запросов. """
         self.object = self.get_object()
-        if 'content' in request.POST:
+        if 'content' in request.POST: # Проверяем, что в POST-запросе есть поле 'content', это означает, что пользователь пытается добавить комментарий
             # Обработка добавления комментария
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                comment = form.save(commit=False)
-                comment.news = self.object
-                comment.author = request.user
-                comment.save()
-                return redirect('news_detail', pk=self.object.pk)
-        elif 'like_comment' in request.POST:
+            form = CommentForm(request.POST) # Создаем форму для добавления комментариев с данными из POST-запроса
+            if form.is_valid(): # Проверяем, что данные формы валидны
+                comment = form.save(commit=False) # Создаем объект комментария без сохранения в базу данных
+                comment.news = self.object # Привязывает комментарий к текущей новости
+                comment.author = request.user # Привязывает комментарий к текущему пользователю
+                comment.save() # Сохраняем комментарий в базу данных
+                return redirect('news_detail', pk=self.object.pk) # Перенаправляет пользователя на страницу деталей новости
+        elif 'like_comment' in request.POST: # Проверяем, что в POST-запросе есть поле 'like_comment', это означает, что пользователь пытается лайкнуть комментарий
             # Обработка лайка комментария
-            comment_id = request.POST.get('like_comment')
-            comment = get_object_or_404(Comment, id=comment_id)
-            if request.user in comment.likes.all():
-                comment.likes.remove(request.user)
+            comment_id = request.POST.get('like_comment') # Получаем идентификатор комментария из POST-запроса
+            comment = get_object_or_404(Comment, id=comment_id) # Получаем объект комментария из базы данных по его идентификатору или генерируем ошибку 404, если комментарий не найден
+            if request.user in comment.likes.all(): # Проверяем, лайкнул ли текущий пользователь этот комментарий
+                comment.likes.remove(request.user) # Если да, то удаляем лайк
             else:
-                comment.likes.add(request.user)
-            return redirect('news_detail', pk=self.object.pk)
+                comment.likes.add(request.user) # Если нет, то добавляем лайк
+            return redirect('news_detail', pk=self.object.pk) # Перенаправляет пользователя на страницу-details новости
 
         context = self.get_context_data(object=self.object)
         context['comment_form'] = form
         return render(request, self.template_name, context)
     
 class DeleteCommentView(DeleteView):
+    """Удаление комментария"""
     model = Comment
     success_url = reverse_lazy('news_list')
 
     def get_success_url(self):
+        """ Метод для перенаправления пользователя на страницу новости, к которой принадлежал удаленный комментарий. """
         return reverse_lazy('news_detail', kwargs={'pk': self.object.news.id})
 
     def get_object(self, queryset=None):
+        """ Метод для получения объекта комментария. И если текущий пользователь не является автором комментария или администратором, то генерирует ошибку """
         obj = super().get_object(queryset)
         if not (self.request.user == obj.author or self.request.user.is_staff):
             raise PermissionDenied("You do not have permission to delete this comment.")
         return obj
-
-class LikeCommentView(View):
-    def post(self, request, comment_id):
-        comment = get_object_or_404(Comment, id=comment_id)
-        if request.user in comment.likes.all():
-            comment.likes.remove(request.user)
-        else:
-            comment.likes.add(request.user)
-        return JsonResponse({'likes': comment.total_likes()})
 
 class NewsByTagView(ListView):
     """

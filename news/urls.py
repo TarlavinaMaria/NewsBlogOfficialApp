@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import NewsListView, NewsDetailView, NewsByTagView, ArchivedNewsView, ActiveNewsSearchView, ArchivedNewsSearchView, ProposeNewsView, SiteInformationView, DeleteCommentView, LikeCommentView
+from .views import NewsListView, NewsDetailView, NewsByTagView, ArchivedNewsView, ActiveNewsSearchView, ArchivedNewsSearchView, ProposeNewsView, SiteInformationView, DeleteCommentView
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -17,7 +17,6 @@ urlpatterns = [
     path('propose/', ProposeNewsView.as_view(), name='propose_news'),
     path('site-information/', SiteInformationView.as_view(), name='site_information'),
     path('comment/<int:pk>/delete/', DeleteCommentView.as_view(), name='delete_comment'),
-    path('comment/<int:comment_id>/like/', LikeCommentView.as_view(), name='like_comment'),
 ]
 
 if settings.DEBUG:
