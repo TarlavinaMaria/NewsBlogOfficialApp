@@ -87,6 +87,7 @@
 
             {% endif %}
         </div>
+        {% if user.is_authenticated %}
         <div class="col-12 col-lg-5">
             <!-- Блок для предварительного просмотра новости -->
             <div class="card">
@@ -103,7 +104,7 @@
         </div>
     </div>
 </div>
-
+{% endif %}
 <script>
         document.addEventListener('DOMContentLoaded', function() {
         // Получение элементов формы
