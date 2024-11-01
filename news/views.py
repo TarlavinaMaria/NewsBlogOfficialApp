@@ -120,7 +120,7 @@ class NewsByTagView(ListView):
         """
         Метод для получения списка новостей, связанных с определенным тегом и со статусом 'published'.
         """
-        self.tag = get_object_or_404(Tag, name=self.kwargs['tag_name'])
+        self.tag = get_object_or_404(Tag, slug=self.kwargs['tag_slug'])
         status = self.kwargs.get('status', 'published')
         return News.objects.filter(tags=self.tag, status=status).order_by('-pub_date')
 

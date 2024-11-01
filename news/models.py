@@ -2,14 +2,20 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth.models import User
-
+from unidecode import unidecode
 
 class Tag(models.Model):
     """Класс для тегов новостей"""
     name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=50, unique=True, blank=True)
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        # Транслитерация имени тега
+        self.slug = unidecode(self.name)
+        super().save(*args, **kwargs)
 
 class News(models.Model):
     """Класс для новостей"""

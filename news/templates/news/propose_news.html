@@ -1,13 +1,11 @@
 {% extends 'news/base.html' %}
 
-<!--Предложить новость-->
-
 {% block content %}
 <h1>Предложить новость</h1>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 col-lg-12">
+        <div class="col-12 col-lg-7">
             {% if user.is_authenticated %}
             <form method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
@@ -32,20 +30,38 @@
                         <div class="alert alert-danger mt-1">{{ form.content.errors.as_text }}</div>
                     {% endif %}
                 </div>
+                
+                <!-- Таблица с фиксированным размером и прокруткой -->
                 <div class="mb-3">
                     <label class="form-label">Теги:</label>
-                    <div class="tag-columns form-check form-switch">
-                        {% for tag in form.tags %}
-                            <div class="form-check">
-                                {{ tag.tag }}
-                                <label class="form-check-label" for="{{ tag.id_for_label }}">{{ tag.choice_label }}</label>
-                            </div>
-                        {% endfor %}
+                    <div style="overflow-x: auto; max-width: 100%; height: 300px;">
+                        <table class="table table-bordered" style="min-width: 1100px;">
+                            <thead>
+                                <tr>
+                                    <th colspan="5">Теги</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for tag in form.tags %}
+                                {% if forloop.counter0|divisibleby:5 %}
+                                <tr>
+                                {% endif %}
+                                    <td>
+                                        <input type="checkbox" name="{{ tag.name }}" id="{{ tag.id_for_label }}">
+                                        <label for="{{ tag.id_for_label }}">{{ tag.choice_label }}</label>
+                                    </td>
+                                {% if forloop.counter0|add:1|divisibleby:5 or forloop.last %}
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                     {% if form.tags.errors %}
                         <div class="alert alert-danger mt-1">{{ form.tags.errors.as_text }}</div>
                     {% endif %}
                 </div>
+
                 <div class="mb-3">
                     <label for="{{ form.image.id_for_label }}" class="form-label">{{ form.image.label }}</label>
                     <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class="form-control" accept="image/*">
@@ -53,13 +69,16 @@
                         <div class="alert alert-danger mt-1">{{ form.image.errors.as_text }}</div>
                     {% endif %}
                 </div>
+
                 <div class="mb-3">
                     {% if form.non_field_errors %}
                         <div class="alert alert-danger">{{ form.non_field_errors }}</div>
                     {% endif %}
                 </div>
+
                 <button type="submit" class="btn btn-dark">Отправить</button>
             </form>
+
             {% else %}
             <div class="alert alert-warning" role="alert">
                 Для того чтобы предложить новость, пожалуйста, <a href="{% url 'login' %}">авторизуйтесь</a>.
@@ -68,6 +87,65 @@
 
             {% endif %}
         </div>
+        <div class="col-12 col-lg-5">
+            <!-- Блок для предварительного просмотра новости -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Предварительный просмотр</h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" id="preview-title">Заголовок</h5>
+                    <p class="card-text" id="preview-brief">Краткое описание</p>
+                    <p class="card-text" id="preview-content">Содержание</p>
+                    <p class="card-text" id="preview-image">Нет изображения</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // Получение элементов формы
+        const titleInput = document.getElementById('{{ form.title.id_for_label }}');
+        const briefInput = document.getElementById('{{ form.brief.id_for_label }}');
+        const contentInput = document.getElementById('{{ form.content.id_for_label }}');
+        const imageInput = document.getElementById('{{ form.image.id_for_label }}');
+
+        // Получение элементов preview
+        const previewTitle = document.getElementById('preview-title');
+        const previewBrief = document.getElementById('preview-brief');
+        const previewContent = document.getElementById('preview-content');
+        const previewImage = document.getElementById('preview-image');
+        // const previewTags = document.getElementById('preview-tags'); // Remove this line
+
+        // Обновление preview при изменении полей формы
+        titleInput.addEventListener('input', function() {
+            previewTitle.textContent = titleInput.value;
+        });
+
+        briefInput.addEventListener('input', function() {
+            previewBrief.textContent = briefInput.value;
+        });
+
+        contentInput.addEventListener('input', function() {
+            previewContent.textContent = contentInput.value;
+        });
+
+        imageInput.addEventListener('change', function() {
+            const file = imageInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.innerHTML = `<img src="${e.target.result}" alt="Превью изображения" class="img-fluid">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewImage.textContent = 'Нет изображения';
+                previewImage.innerHTML = '';
+            }
+        });
+    });
+</script>
+
 {% endblock %}

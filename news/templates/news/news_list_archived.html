@@ -1,6 +1,6 @@
 {% extends 'news/base.html' %}
 
-<!--Новости активные-->
+<!--Новости архивные -->
 
 {% block content %}
     <h2 class="mb-4">Архивные новости</h2>
@@ -59,20 +59,21 @@
     <div id="newsList" class="row">
         {% for news in news_list %}
             <div class="col-md-6 mb-4">
-                <div class="card">
+                <div class="card h-100"> 
                     {% if news.image %}
                         <img src="{{ news.image.url }}" class="card-img-top" alt="{{ news.title }}" class="news-image mb-3">
                     {% endif %}
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column"> 
                         <h5 class="card-title"><a href="{% url 'news_detail' news.pk %}">{{ news.title|linebreaks }}</a></h5>
                         <p class="card-text">{{ news.brief|linebreaks }}</p>
                         <p class="card-text">Дата загрузки: {{ news.pub_date }}</p>
                         <p class="card-text">Количество просмотров: {{ news.views }}</p>
                         <p class="card-text">Теги: 
                             {% for tag in news.tags.all %}
-                                <a href="{% url 'news_by_tag_status' tag.name 'archived' %}" class="badge badge-primary">{{ tag.name }}</a>
+                                <a href="{% url 'news_by_tag_status' tag.slug 'archived' %}" class="badge badge-primary">{{ tag.name }}</a>
                             {% endfor %}
                         </p>
+                        <a href="{% url 'news_detail' news.pk %}" class="btn btn-primary mt-auto">Подробнее</a>
                     </div>
                 </div>
             </div>

@@ -15,7 +15,7 @@
           <p class="card-text">Количество просмотров: {{ news.views }}</p>
           <p class="card-text">
               Теги: {% for tag in news.tags.all %}
-              <a href="{% url 'news_by_tag_status' tag.name news.status %}" class="badge badge-primary">{{ tag.name }}</a>
+              <a href="{% url 'news_by_tag_status' tag.slug news.status %}" class="badge badge-primary">{{ tag.name }}</a>
               {% endfor %}
           </p>
           <a href="{% if news.status == 'archived' %}{% url 'archived_news' %}{% else %}{% url 'news_list' %}{% endif %}" class="btn btn-secondary">Назад</a>
