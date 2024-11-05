@@ -5,7 +5,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 col-lg-7">
+        <div class="col-12 col-lg-12">
             {% if user.is_authenticated %}
             <form method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
@@ -88,25 +88,11 @@
             {% endif %}
         </div>
         {% if user.is_authenticated %}
-        <div class="col-12 col-lg-5">
-            <!-- Блок для предварительного просмотра новости -->
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Предварительный просмотр</h5>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title" id="preview-title">Заголовок</h5>
-                    <p class="card-text" id="preview-brief">Краткое описание</p>
-                    <p class="card-text" id="preview-content">Содержание</p>
-                    <p class="card-text" id="preview-image">Нет изображения</p>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 {% endif %}
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
         // Получение элементов формы
         const titleInput = document.getElementById('{{ form.title.id_for_label }}');
         const briefInput = document.getElementById('{{ form.brief.id_for_label }}');
@@ -118,7 +104,6 @@
         const previewBrief = document.getElementById('preview-brief');
         const previewContent = document.getElementById('preview-content');
         const previewImage = document.getElementById('preview-image');
-        // const previewTags = document.getElementById('preview-tags'); // Remove this line
 
         // Обновление preview при изменении полей формы
         titleInput.addEventListener('input', function() {
@@ -148,5 +133,6 @@
         });
     });
 </script>
+
 
 {% endblock %}
