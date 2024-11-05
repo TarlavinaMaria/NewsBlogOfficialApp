@@ -2,14 +2,13 @@ from django.shortcuts import render, redirect
 from django.views.generic import View, ListView, DetailView
 from django.contrib.auth.views import PasswordResetView
 from news.models import News
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, get_user_model
 from .forms import RegistrationForm, LoginForm
 from .forms import ProfileForm
 from .models import Profile
 from datetime import date
 from news.models import Comment
 from django.urls import reverse_lazy
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.conf import settings
 
@@ -207,7 +206,9 @@ class UserActivityView(ListView):
         context = super().get_context_data(**kwargs)
         context['user_comments'] = Comment.objects.filter(author=self.request.user).order_by('-created_at')
         return context
-    
+
+User = get_user_model()
+
 class WebPasswordResetView(PasswordResetView):
     template_name = 'users/password_reset.html'
     email_template_name = 'users/password_reset_email.html'
