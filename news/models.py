@@ -6,8 +6,8 @@ from unidecode import unidecode
 
 class Tag(models.Model):
     """Класс для тегов новостей"""
-    name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=50, unique=True, blank=True)
+    name = models.CharField(max_length=50, unique=True, verbose_name='Название')
+    slug = models.SlugField(max_length=50, unique=True, blank=True, verbose_name='URL')
 
     def __str__(self):
         return self.name
@@ -16,6 +16,10 @@ class Tag(models.Model):
         # Транслитерация имени тега
         self.slug = unidecode(self.name)
         super().save(*args, **kwargs)
+
+    class Meta:
+        verbose_name = "Тег"
+        verbose_name_plural = "Теги"
 
 class News(models.Model):
     """Класс для новостей"""
@@ -44,19 +48,27 @@ class News(models.Model):
         self.views += 1
         self.save(update_fields=['views'])
 
+    class Meta:
+        verbose_name = "Новость"
+        verbose_name_plural = "Новости"
+
 
 class Comment(models.Model):
     """Модель для комментариев к новостям"""
-    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(User, related_name='liked_comments', blank=True)
+    news = models.ForeignKey(News, on_delete=models.CASCADE, related_name='comments', verbose_name='Новость')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
+    content = models.TextField(verbose_name='Текст комментария')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    likes = models.ManyToManyField(User, related_name='liked_comments', blank=True, verbose_name='Лайки')
 
     def __str__(self):
-        return f"Comment by {self.author.username} on {self.news.title}"
+        return f"Комментарий от {self.author.username} к {self.news.title}"
 
     def total_likes(self):
         return self.likes.count()
+    
+    class Meta:
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
 
         

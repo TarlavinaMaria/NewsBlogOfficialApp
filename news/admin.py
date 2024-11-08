@@ -19,15 +19,18 @@ make_archived.short_description = "Пометить как 'Архив'"
 
 class NewsAdmin(admin.ModelAdmin):
     """Класс для управления новостями в админке"""
-    list_display = ('title', 'pub_date', 'status')
+    list_display = ('title', 'pub_date', 'status', 'preview_link')
     list_filter = ('status', 'pub_date')
     search_fields = ('title', 'brief', 'content')
     filter_horizontal = ('tags',)
     actions = [make_published, make_draft, make_archived]
-    readonly_fields = ('preview',)
 
-    def preview(self, obj):
-        return format_html('<a href="{}" target="_blank">Предварительный просмотр</a>', f'/admin/news/news/{obj.id}/preview/')
+    def preview_link(self, obj):
+        if obj.id:
+            return format_html('<a href="{}" target="_blank">Предварительный просмотр</a>', f'/admin/news/news/{obj.id}/preview/')
+        else:
+            return "Предварительный просмотр недоступен до сохранения новости"
+    preview_link.short_description = "Предварительный просмотр"
 
     def get_urls(self):
         urls = super().get_urls()
@@ -40,10 +43,31 @@ class NewsAdmin(admin.ModelAdmin):
         news = News.objects.get(id=object_id)
         return render(request, 'news/news_preview.html', {'news': news})
 
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = super().get_readonly_fields(request, obj)
+        if obj:
+            readonly_fields += ('preview',)
+        return readonly_fields
+
+    def preview(self, obj):
+        if obj.id:
+            return format_html('<a href="{}" target="_blank">Предварительный просмотр</a>', f'/admin/news/news/{obj.id}/preview/')
+        else:
+            return "Предварительный просмотр недоступен до сохранения новости"
+    preview.short_description = "Предварительный просмотр"
+
+    class Meta:
+        verbose_name = "Новость"
+        verbose_name_plural = "Новости"
+
 class TagAdmin(admin.ModelAdmin):
     """Класс для управления тегами в админке"""
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
+
+    class Meta:
+        verbose_name = "Тег"
+        verbose_name_plural = "Теги"
 
 class CommentAdmin(admin.ModelAdmin):
     """Класс для управления комментариями в админке"""
@@ -51,6 +75,10 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('news', 'author', 'created_at')
     search_fields = ('content', 'author__username')
     readonly_fields = ('created_at',)
+
+    class Meta:
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
 
 admin.site.register(News, NewsAdmin)
 admin.site.register(Tag, TagAdmin)
