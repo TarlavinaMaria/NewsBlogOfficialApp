@@ -1,15 +1,11 @@
 import asyncio
 
-from django.db.models.signals import post_save, post_migrate
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from news_blog.settings import TELEGRAM_BOT_TOKEN, YOUR_PERSONAL_CHAT_ID
 from news.models import News
 from .telegram_bot import send_telegram_message
-
-from django.contrib.auth.models import Group, Permission, User
-from django.contrib.contenttypes.models import ContentType
-from news.models import News, Comment
 
 
 @receiver(post_save, sender=News)
