@@ -47,7 +47,7 @@
                                 <tr>
                                 {% endif %}
                                     <td>
-                                        <input type="checkbox" name="{{ tag.name }}" id="{{ tag.id_for_label }}">
+                                        <input type="checkbox" name="{{ tag.data.name }}" id="{{ tag.id_for_label }}" value="{{ tag.data.value }}">
                                         <label for="{{ tag.id_for_label }}">{{ tag.choice_label }}</label>
                                     </td>
                                 {% if forloop.counter0|add:1|divisibleby:5 or forloop.last %}

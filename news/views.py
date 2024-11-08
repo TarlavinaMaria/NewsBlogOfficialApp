@@ -291,8 +291,14 @@ class ProposeNewsView(CreateView):
         news.status = 'draft'  # Устанавливаем статус "Не проверено"
         news.author = self.request.user if self.request.user.is_authenticated else User.objects.get(id=1)  # Устанавливаем автора, если пользователь аутентифицирован, иначе администратора
         news.save()
+        print("Selected tags:", form.cleaned_data['tags'])
         form.save_m2m()  # Сохраняем связанные теги
         return super().form_valid(form)
+        
+    def form_invalid(self, form):
+        # Отладочное сообщение
+        print("Form errors:", form.errors)
+        return super().form_invalid(form)
 
 
 class SiteInformationView(TemplateView):

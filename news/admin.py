@@ -40,6 +40,11 @@ class NewsAdmin(admin.ModelAdmin):
         news = News.objects.get(id=object_id)
         return render(request, 'news/news_preview.html', {'news': news})
 
+class TagAdmin(admin.ModelAdmin):
+    """Класс для управления тегами в админке"""
+    list_display = ('name', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
+
 class CommentAdmin(admin.ModelAdmin):
     """Класс для управления комментариями в админке"""
     list_display = ('news', 'author', 'content', 'created_at')
@@ -48,5 +53,5 @@ class CommentAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at',)
 
 admin.site.register(News, NewsAdmin)
-admin.site.register(Tag)
-admin.site.register(Comment, CommentAdmin) 
+admin.site.register(Tag, TagAdmin)
+admin.site.register(Comment, CommentAdmin)
