@@ -12,7 +12,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 
-
 class NewsListView(ListView):
     """ 
     Назначение: Этот класс-представление используется для отображения списка опубликованных новостей.
@@ -302,3 +301,7 @@ class SiteInformationView(TemplateView):
     - template_name: Шаблон, который будет отображаться (news/site_information.html).
     """
     template_name = 'news/site_information.html'
+
+
+def custom_404_view(request, exception):
+    return render(request, '404.html', status=404)
