@@ -199,7 +199,7 @@ class ActiveNewsSearchView(ListView):
             Фильтруем новости по заголовку или содержанию.
             """
             news_list = news_list.filter(
-                Q(title__icontains=query) | Q(content__icontains=query)
+                Q(title__iregex=query) | Q(content__iregex=query)
             )
 
         if sort_by:
@@ -302,6 +302,3 @@ class SiteInformationView(TemplateView):
     """
     template_name = 'news/site_information.html'
 
-
-def custom_404_view(request, exception):
-    return render(request, '404.html', status=404)

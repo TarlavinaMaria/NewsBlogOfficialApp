@@ -28,7 +28,7 @@
 
     <form id="sortForm" method="get" action="{% url 'search_archived' %}" class="mb-4 d-flex flex-wrap align-items-center">
         <input type="hidden" name="q" value="{{ query }}">
-        <div class="form-group mr-3">
+        <div class="form-group mr-3 mb-3">
             <label for="sort_by" class="mr-2">Сортировать по:</label>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="sort_by" id="sort_by_date" value="pub_date" {% if sort_by == 'pub_date' or not sort_by %}checked{% endif %}>
@@ -39,7 +39,7 @@
                 <label class="form-check-label" for="sort_by_views">Просмотрам</label>
             </div>
         </div>
-        <div class="form-group mr-3">
+        <div class="form-group mb-3">
             <label for="order" class="mr-2">Порядок:</label>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="order" id="order_desc" value="desc" {% if order == 'desc' or not order %}checked{% endif %}>

@@ -31,9 +31,10 @@
                     {% endif %}
                 </div>
                 
-                <!-- Таблица с фиксированным размером и прокруткой -->
+                <!-- Поле для поиска тегов -->
                 <div class="mb-3">
                     <label class="form-label">Теги:</label>
+                    <input type="text" id="tagSearch" class="form-control mb-3" placeholder="Поиск тегов...">
                     <div style="overflow-x: auto; max-width: 100%; height: 300px;">
                         <table class="table table-bordered" style="min-width: 1100px;">
                             <thead>
@@ -41,18 +42,14 @@
                                     <th colspan="5">Теги</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="tagTableBody">
                                 {% for tag in form.tags %}
-                                {% if forloop.counter0|divisibleby:5 %}
-                                <tr>
-                                {% endif %}
+                                <tr class="tag-row">
                                     <td>
                                         <input type="checkbox" name="{{ tag.data.name }}" id="{{ tag.id_for_label }}" value="{{ tag.data.value }}">
-                                        <label for="{{ tag.id_for_label }}">{{ tag.choice_label }}</label>
+                                        <label for="{{ tag.id_for_label }}" class="tag-label">{{ tag.choice_label }}</label>
                                     </td>
-                                {% if forloop.counter0|add:1|divisibleby:5 or forloop.last %}
                                 </tr>
-                                {% endif %}
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -91,48 +88,22 @@
     </div>
 </div>
 {% endif %}
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Получение элементов формы
-        const titleInput = document.getElementById('{{ form.title.id_for_label }}');
-        const briefInput = document.getElementById('{{ form.brief.id_for_label }}');
-        const contentInput = document.getElementById('{{ form.content.id_for_label }}');
-        const imageInput = document.getElementById('{{ form.image.id_for_label }}');
+        const tagSearchInput = document.getElementById('tagSearch');
+        const tagTableBody = document.getElementById('tagTableBody');
+        const rows = Array.from(tagTableBody.getElementsByClassName('tag-row'));
 
-        // Получение элементов preview
-        const previewTitle = document.getElementById('preview-title');
-        const previewBrief = document.getElementById('preview-brief');
-        const previewContent = document.getElementById('preview-content');
-        const previewImage = document.getElementById('preview-image');
-
-        // Обновление preview при изменении полей формы
-        titleInput.addEventListener('input', function() {
-            previewTitle.textContent = titleInput.value;
-        });
-
-        briefInput.addEventListener('input', function() {
-            previewBrief.textContent = briefInput.value;
-        });
-
-        contentInput.addEventListener('input', function() {
-            previewContent.textContent = contentInput.value;
-        });
-
-        imageInput.addEventListener('change', function() {
-            const file = imageInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.innerHTML = `<img src="${e.target.result}" alt="Превью изображения" class="img-fluid">`;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                previewImage.textContent = 'Нет изображения';
-                previewImage.innerHTML = '';
-            }
+        tagSearchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            rows.forEach(row => {
+                const labels = Array.from(row.getElementsByClassName('tag-label'));
+                const shouldShow = labels.some(label => label.textContent.toLowerCase().includes(query));
+                row.style.display = shouldShow ? '' : 'none';
+            });
         });
     });
 </script>
-
 
 {% endblock %}

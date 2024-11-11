@@ -33,7 +33,10 @@
                     <p class="text-center">Вы еще не лайкнули ни одного комментария.</p>
                     {% endfor %}
 
-                    <h3 class="mt-5">Ваши комментарии</h3>
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <div></div> <!-- Пустой элемент для выравнивания -->
+                        <h3 class="mb-0">Ваши комментарии</h3>
+                    </div>
                     {% for comment in user_comments %}
                     <div class="card mb-4 shadow-sm">
                         <div class="card-body">
