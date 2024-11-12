@@ -251,7 +251,7 @@ class ArchivedNewsSearchView(ListView):
 
         if query:
             news_list = news_list.filter(
-                Q(title__icontains=query) | Q(content__icontains=query)
+                Q(title__iregex=query) | Q(content__iregex=query)
             )
 
         if sort_by:
