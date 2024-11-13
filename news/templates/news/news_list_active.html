@@ -68,6 +68,7 @@
                         <p class="card-text">{{ news.brief|linebreaks }}</p>
                         <p class="card-text">Дата загрузки: {{ news.pub_date }}</p>
                         <p class="card-text">Количество просмотров: {{ news.views }}</p>
+                        <p class="card-text">Количество лайков: {{ news.total_likes }}</p>
                         <p class="card-text">Теги: 
                             {% for tag in news.tags.all %}
                                 <a href="{% url 'news_by_tag' tag.slug %}" class="badge badge-primary">{{ tag.name }}</a>

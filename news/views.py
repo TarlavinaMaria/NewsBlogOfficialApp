@@ -30,6 +30,10 @@ class NewsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['published_count'] = News.objects.filter(status='published').count()
+
+        # Добавляем количество лайков для каждой новости
+        for news in context['news_list']:
+            news.total_likes = news.total_likes()
         return context
 
 class NewsDetailView(DetailView):
@@ -83,7 +87,14 @@ class NewsDetailView(DetailView):
             else:
                 comment.likes.add(request.user) # Если нет, то добавляем лайк
             return redirect('news_detail', pk=self.object.pk) # Перенаправляет пользователя на страницу-details новости
-
+        elif 'like_news' in request.POST:
+            # Обработка лайка новости
+            if request.user in self.object.likes.all():
+                self.object.likes.remove(request.user)
+            else:
+                self.object.likes.add(request.user)
+            return redirect('news_detail', pk=self.object.pk)
+        
         context = self.get_context_data(object=self.object)
         context['comment_form'] = form
         return render(request, self.template_name, context)
@@ -165,6 +176,10 @@ class ArchivedNewsView(ListView):
         context = super().get_context_data(**kwargs)
         context['archived_count'] = News.objects.filter(status='archived').count()
         context['archived'] = True
+
+        # Добавляем количество лайков для каждой новости
+        for news in context['news_list']:
+            news.total_likes = news.total_likes()
         return context
 
 class ActiveNewsSearchView(ListView):

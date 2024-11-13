@@ -53,6 +53,27 @@
                     {% empty %}
                     <p class="text-center">Вы еще не оставили ни одного комментария.</p>
                     {% endfor %}
+
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <div></div>
+                        <h3 class="mb-0">Лайкнутые новости</h3>
+                    </div>
+                    {% for news in liked_news %}
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ news.title }}</h4>
+                            <p class="card-text">{{ news.brief }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Дата публикации: {{ news.pub_date|date:"d.m.Y H:i" }}</small>
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <a href="{% url 'news_detail' news.id %}" class="btn btn-primary">Перейти к новости</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center">Вы еще не лайкнули ни одной новости.</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>

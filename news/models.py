@@ -38,6 +38,7 @@ class News(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft', verbose_name='Статус')
     image = models.ImageField(upload_to='news_images/', blank=True, null=True, verbose_name='Изображение')
     author = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, verbose_name='Автор')  # Устанавливаем по умолчанию администратора
+    likes = models.ManyToManyField(User, related_name='liked_news', blank=True, verbose_name='Лайки')
     notified = models.BooleanField(default=False, verbose_name='Уведомление отправлено')
 
     def __str__(self):
@@ -47,6 +48,10 @@ class News(models.Model):
         # Добавляем один просмотр к новости при каждом открытии
         self.views += 1
         self.save(update_fields=['views'])
+
+    def total_likes(self):
+        # Добавляем количество лайков к новости
+        return self.likes.count()
 
     class Meta:
         verbose_name = "Новость"

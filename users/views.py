@@ -205,6 +205,7 @@ class UserActivityView(ListView):
         """Добавляет в контекст данные о пользователе"""
         context = super().get_context_data(**kwargs)
         context['user_comments'] = Comment.objects.filter(author=self.request.user).order_by('-created_at')
+        context['liked_news'] = News.objects.filter(likes=self.request.user).order_by('-pub_date')
         return context
 
 User = get_user_model()
