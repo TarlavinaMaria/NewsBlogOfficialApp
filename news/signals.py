@@ -20,7 +20,6 @@ def send_telegram_notification(sender, instance, created, **kwargs):
 
         # Формируем сообщение с полной информацией о новости
         message_template = (
-            f"Новая новость предложена:\n\n"
             f"Заголовок: {instance.title}\n"
             f"Краткое описание: {instance.brief}\n"
             f"Текст новости: {content_truncated}\n"
