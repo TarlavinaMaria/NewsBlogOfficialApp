@@ -80,6 +80,14 @@ class NewsAdmin(admin.ModelAdmin):
         if obj:
             readonly_fields += ('preview',)
         return readonly_fields
+    
+    def preview(self, obj):
+        """Функция для создания ссылки на предварительный просмотр новости"""
+        if obj.id:
+            return format_html('<a href="{}" target="_blank">Предварительный просмотр</a>', f'/admin/news/news/{obj.id}/preview/')
+        else:
+            return "Предварительный просмотр недоступен до сохранения новости"
+    preview.short_description = "Предварительный просмотр"
 
     def total_likes(self, obj):
         # Возвращаем количество лайков для каждой новости
