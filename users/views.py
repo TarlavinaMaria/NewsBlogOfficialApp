@@ -211,17 +211,19 @@ class UserActivityView(ListView):
 User = get_user_model()
 
 class WebPasswordResetView(PasswordResetView):
-    template_name = 'users/password_reset.html'
-    email_template_name = 'users/password_reset_email.html'
-    subject_template_name = 'users/password_reset_subject.txt'
-    success_url = reverse_lazy('password_reset_done')
+    """Восстановление пароля"""
+    template_name = 'users/password_reset.html' # Шаблон для страницы восстановления пароля
+    email_template_name = 'users/password_reset_email.html' # Шаблон для письма с ссылкой для восстановления пароля
+    subject_template_name = 'users/password_reset_subject.txt' # Шаблон для темы письма с ссылкой для восстановления пароля
+    success_url = reverse_lazy('password_reset_done') # URL для перенаправления после успешного восстановления пароля
 
     def form_valid(self, form):
-        email = form.cleaned_data['email']
-        if not User.objects.filter(email=email).exists():
-            messages.error(self.request, 'Пользователь с таким email не найден.')
-            return redirect('password_reset')
-        return super().form_valid(form)
+        """Отправка письма с ссылкой для восстановления пароля"""
+        email = form.cleaned_data['email'] # Получение email пользователя из формы
+        if not User.objects.filter(email=email).exists(): # Проверка существования пользователя с таким email
+            messages.error(self.request, 'Пользователь с таким email не найден.') # Сообщение об ошибке, если пользователь с таким email не найден
+            return redirect('password_reset') # Перенаправление на страницу восстановления пароля
+        return super().form_valid(form) # Вызов метода родительского класса для отправки письма с ссылкой для восстановления пароля
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

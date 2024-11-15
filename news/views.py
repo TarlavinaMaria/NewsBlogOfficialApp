@@ -87,13 +87,13 @@ class NewsDetailView(DetailView):
             else:
                 comment.likes.add(request.user) # Если нет, то добавляем лайк
             return redirect('news_detail', pk=self.object.pk) # Перенаправляет пользователя на страницу-details новости
-        elif 'like_news' in request.POST:
+        elif 'like_news' in request.POST: # Проверяем, что в POST-запросе есть поле 'like_news', это означает, что пользователь пытается лайкнуть новость
             # Обработка лайка новости
-            if request.user in self.object.likes.all():
-                self.object.likes.remove(request.user)
+            if request.user in self.object.likes.all(): # Проверяем, лайкнул ли текущий пользователь эту новость
+                self.object.likes.remove(request.user) # Если да, то удаляем лайк
             else:
-                self.object.likes.add(request.user)
-            return redirect('news_detail', pk=self.object.pk)
+                self.object.likes.add(request.user) # Если нет, то добавляем лайк
+            return redirect('news_detail', pk=self.object.pk) # Перенаправляет пользователя на страницу-details новости
         
         context = self.get_context_data(object=self.object)
         context['comment_form'] = form
@@ -301,10 +301,10 @@ class ProposeNewsView(CreateView):
     success_url = reverse_lazy('news_list')
 
     def form_valid(self, form):
-        news = form.save(commit=False)
+        news = form.save(commit=False) # Создаем экземпляр модели News, но не сохраняем его в базу данных
         news.status = 'draft'  # Устанавливаем статус "Не проверено"
         news.author = self.request.user if self.request.user.is_authenticated else User.objects.get(id=1)  # Устанавливаем автора, если пользователь аутентифицирован, иначе администратора
-        news.save()
+        news.save() # Сохраняем экземпляр модели News в базу данных
         form.save_m2m()  # Сохраняем связанные теги
         return super().form_valid(form)
 
