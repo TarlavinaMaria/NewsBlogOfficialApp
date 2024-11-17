@@ -70,8 +70,7 @@ https://24newsblog.ru
 
 1. Клонируйте репозиторий:
    ```
-   git clone https://github.com/TarlavinaMaria/NewsBlogOfficial
-   cd NewsBlogOfficial
+   git clone https://github.com/TarlavinaMaria/NewsBlogOfficialApp.git
    ```
 
 2. Создайте виртуальное окружение:
